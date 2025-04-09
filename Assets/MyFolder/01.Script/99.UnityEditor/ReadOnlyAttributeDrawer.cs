@@ -23,7 +23,6 @@ namespace UnityEditor
         }
     }
 }
-#endif
 
 [AttributeUsage(AttributeTargets.Field)]
 public class ReadOnlyAttribute : PropertyAttribute
@@ -34,3 +33,4 @@ public class ReadOnlyAttribute : PropertyAttribute
         this.runtimeOnly = runtimeOnly;
     }
 }
+#endif

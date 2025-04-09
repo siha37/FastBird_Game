@@ -15,8 +15,6 @@ namespace Assets.MyFolder._01.Script._02.Object.Player.Module.child
         PlayerController player;
         Rigidbody2D rd;
 
-        bool IsMove = false;
-
         public void Init(PlayerController player)
         {
             this.player = player;
@@ -25,8 +23,6 @@ namespace Assets.MyFolder._01.Script._02.Object.Player.Module.child
 
         public void FixedUpdate()
         {
-            if(!IsMove) return;
-            rd.linearVelocity = new Vector2(player.GetModule<PlayerStatsModule>().CurrentSpeed,rd.linearVelocity.y);
         }
 
         public void LateUpdate()
@@ -47,15 +43,14 @@ namespace Assets.MyFolder._01.Script._02.Object.Player.Module.child
 
         public void ChangedState(IPlayerState oldstate, IPlayerState newstate)
         {
-            if(newstate is MoveState || newstate is DashState)
-            {
-                IsMove = true;
-            }
-            else
-            {
-                IsMove = false;
-            }
         }
 
+        public void Jump()
+        {
+            if (rd)
+            {
+                rd.AddForce(Vector2.up * player.GetModule<PlayerStatsModule>().JumpForce, ForceMode2D.Force);
+            }
+        }
     }
 }

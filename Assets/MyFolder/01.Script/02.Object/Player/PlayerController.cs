@@ -3,9 +3,9 @@ using Assets.MyFolder._01.Script._02.Object.Player.Module.child;
 using Assets.MyFolder._01.Script._02.Object.Player.State;
 using Assets.MyFolder._01.Script._02.Object.Player.State.child;
 using System.Collections.Generic;
-using System.ComponentModel;
+using MyFolder._01.Script._02.Object.Player.Module.child;
 using UnityEngine;
-using UnityEngine.Serialization;
+using UnityEngine.InputSystem;
 
 namespace Assets.MyFolder._01.Script._02.Object.Player
 {
@@ -21,7 +21,7 @@ namespace Assets.MyFolder._01.Script._02.Object.Player
     /// <see cref="MonoBehaviour"/>
     public class PlayerController : MonoBehaviour
     {
-        /********************Àü¿ª º¯¼ö ¼±¾ð********************/
+        /********************ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½********************/
         #region MODULE
 
         Dictionary<System.Type, IPlayerModule> modules = new Dictionary<System.Type, IPlayerModule>();
@@ -38,12 +38,13 @@ namespace Assets.MyFolder._01.Script._02.Object.Player
         #region Inspector
 
         [Header("State")]
-        [ReadOnly][SerializeField] string currentStateName;
+        [SerializeField] string currentStateName;
+        public InputActionAsset inputActionAsset;
 
         #endregion
 
 
-        /********************ÃÊ±âÈ­ ÇÔ¼ö**********************/
+        /********************ï¿½Ê±ï¿½È­ ï¿½Ô¼ï¿½**********************/
         #region INIT
         private void Start()
         {
@@ -55,6 +56,7 @@ namespace Assets.MyFolder._01.Script._02.Object.Player
         {
             AddModule<PlayerStatsModule>();
             AddModule<PlayerMovement>();
+            AddModule<PlayerInputModule>();
             AddModule<AnimationController>();
         }
 
@@ -65,7 +67,7 @@ namespace Assets.MyFolder._01.Script._02.Object.Player
         }
         #endregion
 
-        /********************¾÷µ¥ÀÌÆ® ÇÔ¼ö********************/
+        /********************ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ® ï¿½Ô¼ï¿½********************/
         #region UPDATE
         private void Update()
         {
@@ -83,7 +85,7 @@ namespace Assets.MyFolder._01.Script._02.Object.Player
         }
         #endregion
 
-        /********************Public ÇÔ¼ö*********************/
+        /********************Public ï¿½Ô¼ï¿½*********************/
         #region MODULE
 
         public T AddModule<T>() where T : IPlayerModule, new()
@@ -156,7 +158,7 @@ namespace Assets.MyFolder._01.Script._02.Object.Player
 
         #endregion
 
-        /********************Private ÇÔ¼ö**********************/
+        /********************Private ï¿½Ô¼ï¿½**********************/
 
         #region MODULE
 

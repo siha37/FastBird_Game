@@ -21,5 +21,22 @@ public class GameManager : MonoBehaviour
             return instance;    
         }
     }
+    public bool IsGameRunning { get; private set; } = true;
 
+    private void Awake()
+    {
+        if (instance == null)
+        {
+            instance = this;
+            DontDestroyOnLoad(gameObject);
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+    }
+
+    public void StartGame() => IsGameRunning = true;
+
+    public void StopGame() => IsGameRunning = false;
 }
