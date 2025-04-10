@@ -43,8 +43,9 @@ namespace Assets.MyFolder._01.Script._02.Object.Player
 
         #endregion
 
+        private float backgroundSpeed = 1f;
 
-        /********************�ʱ�ȭ �Լ�**********************/
+        /********************  ********************/
         #region INIT
         private void Start()
         {
@@ -58,6 +59,7 @@ namespace Assets.MyFolder._01.Script._02.Object.Player
             AddModule<PlayerMovement>();
             AddModule<PlayerInputModule>();
             AddModule<AnimationController>();
+            AddModule<PlayerGravityModule>();
         }
 
         private void StateInit()
@@ -67,7 +69,7 @@ namespace Assets.MyFolder._01.Script._02.Object.Player
         }
         #endregion
 
-        /********************������Ʈ �Լ�********************/
+        /********************Ʈ  Լ********************/
         #region UPDATE
         private void Update()
         {
@@ -85,7 +87,7 @@ namespace Assets.MyFolder._01.Script._02.Object.Player
         }
         #endregion
 
-        /********************Public �Լ�*********************/
+        /********************Public  Լ*********************/
         #region MODULE
 
         public T AddModule<T>() where T : IPlayerModule, new()
@@ -154,11 +156,23 @@ namespace Assets.MyFolder._01.Script._02.Object.Player
             return stateMachine.GetCurrentState();
         }
 
-
-
         #endregion
 
-        /********************Private �Լ�**********************/
+        public void SetBackgroundSpeed(float speed)
+        {
+            backgroundSpeed = speed;
+            // 배경과 파이프의 속도를 변경하는 로직 추가
+            // 예: BackgroundController.Instance.SetSpeed(speed);
+            // 예: PipeSpawner.Instance.SetSpeed(speed);
+            Debug.Log($"[PlayerController] Background speed set to: {speed}");
+        }
+
+        public float GetBackgroundSpeed()
+        {
+            return backgroundSpeed;
+        }
+
+        /********************Private  Լ**********************/
 
         #region MODULE
 

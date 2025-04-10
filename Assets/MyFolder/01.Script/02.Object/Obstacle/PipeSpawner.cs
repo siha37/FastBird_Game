@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections.Generic;
 using Assets.MyFolder._01.Script._02.Object.Object_Pooling;
+using Assets.MyFolder._01.Script._02.Object.Player;
 
 namespace Assets.MyFolder._01.Script._02.Object.Obstacle
 {
@@ -17,7 +18,7 @@ namespace Assets.MyFolder._01.Script._02.Object.Obstacle
 
         #region  Variables
         [Header("Spawn Settings")]
-        [SerializeField] private float spawnInterval = 2f;
+        [SerializeField] private float baseSpawnInterval = 2f; // 기본 스폰 간격
         [SerializeField] private float minYPosition = -3f;
         [SerializeField] private float maxYPosition = 3f;
         [SerializeField] private float gapHeight = 4f;
@@ -40,6 +41,7 @@ namespace Assets.MyFolder._01.Script._02.Object.Obstacle
         private Camera mainCamera;
         private float spawnXPosition;
         private float destroyXPosition;
+        private PlayerController playerController;
         #endregion
 
         #region Private Methods
@@ -49,6 +51,14 @@ namespace Assets.MyFolder._01.Script._02.Object.Obstacle
             if (mainCamera == null)
             {
                 Debug.LogError("Main Camera not found!");
+                return;
+            }
+
+            // PlayerController 찾기
+            playerController = FindObjectOfType<PlayerController>();
+            if (playerController == null)
+            {
+                Debug.LogError("PlayerController not found!");
                 return;
             }
 
@@ -76,8 +86,10 @@ namespace Assets.MyFolder._01.Script._02.Object.Obstacle
         {
             if (!GameManager.Instance.IsGameRunning || !mainCamera || !PipeObjectPool.Instance) return;
 
+            // 배경 속도에 따라 스폰 간격 조정
+            float currentSpawnInterval = baseSpawnInterval / playerController.GetBackgroundSpeed();
             timer += Time.deltaTime;
-            if (timer >= spawnInterval)
+            if (timer >= currentSpawnInterval)
             {
                 SpawnPipe();
                 timer = 0f;
