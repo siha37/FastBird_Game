@@ -41,6 +41,7 @@ namespace Assets.MyFolder._01.Script._02.Object.Obstacle
         private Camera mainCamera;
         private float spawnXPosition;
         private float destroyXPosition;
+        private Transform lastSpawnXPosition;
         private PlayerController playerController;
         #endregion
 
@@ -55,7 +56,7 @@ namespace Assets.MyFolder._01.Script._02.Object.Obstacle
             }
 
             // PlayerController 찾기
-            playerController = FindObjectOfType<PlayerController>();
+            playerController = FindFirstObjectByType<PlayerController>();
             if (playerController == null)
             {
                 Debug.LogError("PlayerController not found!");
@@ -86,13 +87,9 @@ namespace Assets.MyFolder._01.Script._02.Object.Obstacle
         {
             if (!GameManager.Instance.IsGameRunning || !mainCamera || !PipeObjectPool.Instance) return;
 
-            // 배경 속도에 따라 스폰 간격 조정
-            float currentSpawnInterval = baseSpawnInterval / playerController.GetBackgroundSpeed();
-            timer += Time.deltaTime;
-            if (timer >= currentSpawnInterval)
+            if (Mathf.Abs(lastSpawnXPosition.position.x- spawnXPosition) >= baseSpawnInterval)
             {
                 SpawnPipe();
-                timer = 0f;
             }
         }
 
@@ -128,6 +125,7 @@ namespace Assets.MyFolder._01.Script._02.Object.Obstacle
         {
             Vector3 topPipePosition = new Vector3(spawnXPosition, currentHeight + gapHeight / 2, 0);
             GameObject topPipe = PipeObjectPool.Instance.GetPipe(topPipePosition, Quaternion.identity);
+            lastSpawnXPosition = topPipe.transform;
             topPipe.transform.localScale = new Vector3(1, 1, 1);
             topPipe.transform.SetParent(transform);
         }

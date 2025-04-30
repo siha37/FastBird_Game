@@ -7,13 +7,13 @@ namespace Assets.MyFolder._01.Script._02.Object.Player.Module.child
     public class PlayerGravityModule : IPlayerTickableModule
     {
         [Header("Gravity Settings")]
-        [SerializeField] private float baseGravity = 6.9f;
+        //[SerializeField] private float baseGravity = 6.9f;
         [SerializeField] private float fallMultiplier = 1.5f;
         [SerializeField] private float lowJumpMultiplier = 1.2f;
         [SerializeField] private float maxFallSpeed = 15f;
         [SerializeField] private float jumpDuration = 0.3f;
         [SerializeField] private float maxRotationAngle = 35f; // 최대 회전 각도
-        [SerializeField] private float rotationSpeed = 20f; // 회전 속도
+        [SerializeField] private float rotationSpeed = 30f; // 회전 속도
 
         private PlayerController player;
         private Transform playerTransform;
@@ -113,6 +113,10 @@ namespace Assets.MyFolder._01.Script._02.Object.Player.Module.child
                 {
                     currentVelocity.y = -maxFallSpeed;
                 }
+            }
+            else
+            {
+                targetRotation = maxRotationAngle; // 점프 중일 때 반시계방향 회전
             }
         }
 

@@ -1,26 +1,34 @@
+using Assets.MyFolder._01.Script._02.Object.Player;
 using UnityEngine;
-using Assets.MyFolder._01.Script._02.Object.Object_Pooling;
 
-namespace Assets.MyFolder._01.Script._02.Object.Background
+public class BackgroundManager : SingleTone<BackgroundManager>
 {
-    public class BackgroundManager : MonoBehaviour
+    [Header("Pipe Settings")]
+    [SerializeField] private float baseBackgroundMoveSpeed = 5f;
+    private PlayerController playerController;
+    public float BackGroundMoveSpeed
     {
-        [SerializeField] private int backgroundWidth = 30;
-        [SerializeField] private int initialBackgroundCount = 3;
-
-        private void Start()
+        get
         {
-            // 초기 배경 생성
-            for (int i = 0; i < initialBackgroundCount; i++)
+            if (playerController != null)
             {
-                Vector3 position = new Vector3(i * backgroundWidth, 0, 0);
-                GameObject background = BackgroundObjectPool.Instance.GetBackground(position, Quaternion.identity);
-                if (background)
-                {
-                    background.transform.SetParent(transform);
-                }
+                float finalSpeed = baseBackgroundMoveSpeed * playerController.GetBackgroundSpeed();
+#if UNITY_EDITOR
+                Debug.Log($"[BackgroundManager] Current speed: {finalSpeed:F1} (Base: {baseBackgroundMoveSpeed}, Multiplier: {playerController.GetBackgroundSpeed()})");
+#endif
+                return finalSpeed;
             }
+            return baseBackgroundMoveSpeed;
         }
-
     }
-} 
+    private void Start()
+    {
+        // PlayerController ã��
+        playerController = FindFirstObjectByType<PlayerController>();
+        if (playerController == null)
+        {
+            Debug.LogError("[BackgroundManager] PlayerController not found!");
+        }
+    }
+
+}

@@ -18,7 +18,7 @@ namespace MyFolder._01.Script._02.Object.Player.Module.child
         
         // 터치/드래그 구분을 위한 변수들
         private float touchStartTime;
-        private float touchHoldTime = 0.3f; // 터치로 인식하기 위한 최소 시간
+        private float touchHoldTime = 0.1f; // 터치로 인식하기 위한 최소 시간
         private float positionThreshold = 10f; // 터치로 인식하기 위한 최대 위치 변화량
         private bool isTouchConfirmed = false; // 터치가 확정되었는지 여부
 
@@ -53,7 +53,7 @@ namespace MyFolder._01.Script._02.Object.Player.Module.child
                             float elapsedTime = Time.time - touchStartTime;
 
                             // 0.3초가 지났고 위치 변화가 작으면 터치로 인식
-                            if (!isTouchConfirmed && elapsedTime >= touchHoldTime && dragDistance < positionThreshold)
+                            if (!isTouchConfirmed && elapsedTime >= touchHoldTime && !isDragging && dragDistance < positionThreshold)
                             {
                                 isTouchConfirmed = true;
                                 Debug.Log("[PlayerInput] Touch confirmed - Jumping");
@@ -65,6 +65,7 @@ namespace MyFolder._01.Script._02.Object.Player.Module.child
                             // 드래그 감지
                             if (dragDistance > dragThreshold && !isDragging)
                             {
+                                isTouchConfirmed= true; // 드래그가 확정됨
                                 isDragging = true;
                                 dragStartPosition = player.transform.position;
                                 // 중력 멈춤

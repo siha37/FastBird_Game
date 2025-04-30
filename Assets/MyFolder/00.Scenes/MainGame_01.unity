@@ -148,10 +148,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 272108c98cb235341bc19dfaee95669a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  baseSpawnInterval: 2
+  baseSpawnInterval: 8
   minYPosition: -3
   maxYPosition: 3
-  gapHeight: 4
+  gapHeight: 8
   maxHeightChange: 2
   randomHeightList:
   - probability: 0.1
