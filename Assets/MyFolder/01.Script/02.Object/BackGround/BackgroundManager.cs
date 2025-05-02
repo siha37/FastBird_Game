@@ -1,33 +1,32 @@
+using System.Collections.Generic;
 using Assets.MyFolder._01.Script._02.Object.Player;
+using MyFolder._01.Script._02.Object.Player;
 using UnityEngine;
 
 public class BackgroundManager : SingleTone<BackgroundManager>
 {
     [Header("Pipe Settings")]
-    [SerializeField] private float baseBackgroundMoveSpeed = 5f;
+    [SerializeField] private List<float> backgroundSpeeds = new List<float>(){5};
     private PlayerController playerController;
-    public float BackGroundMoveSpeed
+    public float BackGroundMoveSpeed(int index)
     {
-        get
+        if (playerController)
         {
-            if (playerController != null)
-            {
-                float finalSpeed = baseBackgroundMoveSpeed * playerController.GetBackgroundSpeed();
+            float finalSpeed = backgroundSpeeds[index] * playerController.GetBackgroundSpeed();
 #if UNITY_EDITOR
-                Debug.Log($"[BackgroundManager] Current speed: {finalSpeed:F1} (Base: {baseBackgroundMoveSpeed}, Multiplier: {playerController.GetBackgroundSpeed()})");
+            //Debug.Log($"[BackgroundManager] Current speed: {finalSpeed:F1} (Base: {backgroundSpeeds}, Multiplier: {playerController.GetBackgroundSpeed()})");
 #endif
-                return finalSpeed;
-            }
-            return baseBackgroundMoveSpeed;
+            return finalSpeed;
         }
+        return backgroundSpeeds[index];
     }
     private void Start()
     {
-        // PlayerController Ã£±â
+        // PlayerController Ã£ï¿½ï¿½
         playerController = FindFirstObjectByType<PlayerController>();
         if (playerController == null)
         {
-            Debug.LogError("[BackgroundManager] PlayerController not found!");
+            //Debug.LogError("[BackgroundManager] PlayerController not found!");
         }
     }
 

@@ -1,4 +1,5 @@
-using Assets.MyFolder._01.Script._02.Object.Player.State;
+using MyFolder._01.Script._02.Object.Player;
+using MyFolder._01.Script._02.Object.Player.State;
 using UnityEngine;
 
 namespace Assets.MyFolder._01.Script._02.Object.Player.Module.child
@@ -46,14 +47,11 @@ namespace Assets.MyFolder._01.Script._02.Object.Player.Module.child
 
         public void Jump()
         {
-            if (rd)
-            {
-                float jumpForce = player.GetModule<PlayerStatsModule>().JumpForce;
-                // 중력 모듈에 점프 속도 설정
-                player.GetModule<PlayerGravityModule>().AddVerticalVelocity(jumpForce);
-                // 점프 상태 설정
-                player.GetModule<PlayerGravityModule>().SetJumping(true);
-            }
+            float jumpForce = player.GetModule<PlayerStatsModule>().JumpForce;
+            // 중력 모듈에 점프 속도 설정
+            player.GetModule<PlayerGravityModule>().AddVerticalVelocity(jumpForce);
+            // 점프 상태 설정
+            player.GetModule<PlayerGravityModule>().SetJumping(true);
         }
     }
 }

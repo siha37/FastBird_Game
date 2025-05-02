@@ -1,9 +1,8 @@
-using UnityEngine;
-namespace Assets.MyFolder._01.Script._02.Object.Player.State.child
+namespace MyFolder._01.Script._02.Object.Player.State.child
 {
     public class MoveState : IPlayerState
     {
-        public void Enter()
+        public void Enter(PlayerController player)
         {
         }
 

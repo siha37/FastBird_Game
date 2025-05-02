@@ -1,5 +1,6 @@
 using Assets.MyFolder._01.Script._02.Object.Player.Module;
-using Assets.MyFolder._01.Script._02.Object.Player.State;
+using MyFolder._01.Script._02.Object.Player;
+using MyFolder._01.Script._02.Object.Player.State;
 using UnityEngine;
 
 namespace Assets.MyFolder._01.Script._02.Object.Player.Module.child
@@ -11,7 +12,7 @@ namespace Assets.MyFolder._01.Script._02.Object.Player.Module.child
         [SerializeField] private float fallMultiplier = 1.5f;
         [SerializeField] private float lowJumpMultiplier = 1.2f;
         [SerializeField] private float maxFallSpeed = 15f;
-        [SerializeField] private float jumpDuration = 0.3f;
+        [SerializeField] private float jumpDuration = 0.2f;
         [SerializeField] private float maxRotationAngle = 35f; // 최대 회전 각도
         [SerializeField] private float rotationSpeed = 30f; // 회전 속도
 
@@ -31,7 +32,7 @@ namespace Assets.MyFolder._01.Script._02.Object.Player.Module.child
             playerTransform = player.transform;
             currentVelocity = Vector2.zero;
             targetRotation = 0f;
-            Debug.Log("[PlayerGravityModule] Initialized");
+            //Debug.Log("[PlayerGravityModule] Initialized");
         }
 
         public void OnEnable()
@@ -162,7 +163,10 @@ namespace Assets.MyFolder._01.Script._02.Object.Player.Module.child
 
         public void AddVerticalVelocity(float velocity)
         {
-            currentVelocity.y = velocity;
+            if(currentVelocity.y < 0)
+                currentVelocity.y = velocity;
+            else
+                currentVelocity.y += velocity;
             //Debug.Log($"[PlayerGravityModule] Added vertical velocity: {velocity}");
         }
 
@@ -171,6 +175,13 @@ namespace Assets.MyFolder._01.Script._02.Object.Player.Module.child
             return currentVelocity.y;
         }
 
+        public void SetGravityDie()
+        {
+            isGravityEnabled = false;
+            currentVelocity.y = 0f; // 중력 비활성화 시 수직 속도 초기화
+            targetRotation = 0f; // 회전도 0으로 초기화
+            playerTransform.rotation = Quaternion.identity; // 현재 회전도 0으로 설정
+        }
         public void SetGravityEnabled(bool enabled)
         {
             isGravityEnabled = enabled;
@@ -179,11 +190,7 @@ namespace Assets.MyFolder._01.Script._02.Object.Player.Module.child
                 currentVelocity.y = 0f; // 중력 비활성화 시 수직 속도 초기화
                 targetRotation = 0f; // 회전도 0으로 초기화
                 playerTransform.rotation = Quaternion.identity; // 현재 회전도 0으로 설정
-                Debug.Log($"[PlayerGravityModule] Gravity disabled - Reset rotation to 0°");
-            }
-            else
-            {
-                Debug.Log($"[PlayerGravityModule] Gravity enabled");
+                //Debug.Log($"[PlayerGravityModule] Gravity disabled - Reset rotation to 0°");
             }
         }
     }

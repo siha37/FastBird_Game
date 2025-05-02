@@ -1,9 +1,10 @@
-using UnityEngine;
 using System.Collections.Generic;
-using Assets.MyFolder._01.Script._02.Object.Object_Pooling;
 using Assets.MyFolder._01.Script._02.Object.Player;
+using MyFolder._01.Script._02.Object.Object_Pooling;
+using MyFolder._01.Script._02.Object.Player;
+using UnityEngine;
 
-namespace Assets.MyFolder._01.Script._02.Object.Obstacle
+namespace MyFolder._01.Script._02.Object.Obstacle
 {
     public class PipeSpawner : MonoBehaviour
     {
@@ -23,6 +24,11 @@ namespace Assets.MyFolder._01.Script._02.Object.Obstacle
         [SerializeField] private float maxYPosition = 3f;
         [SerializeField] private float gapHeight = 4f;
         [SerializeField] private float maxHeightChange = 2f; // 이전 높이와의 최대 차이
+        
+        public float GetSetbaseSpawnInterval { get { return baseSpawnInterval; } set { baseSpawnInterval = value; } }
+        public float GetSetGapHeight { get { return gapHeight; } set { gapHeight = value; } }
+        public float GetSetMaxHeightChange { get { return maxHeightChange; } set { maxHeightChange = value; } }
+        
 
         [Header("Random Height Settings")]
         [SerializeField]
@@ -34,13 +40,11 @@ namespace Assets.MyFolder._01.Script._02.Object.Obstacle
             new RandomSameHeight { probability = 0.5f, count = 1 }   // 50%
         };
 
-        private float timer = 0f;
         private float currentHeight;
         private float previousHeight; // 이전 높이 저장
         private int remainingSameHeightPipes = 0;
         private Camera mainCamera;
         private float spawnXPosition;
-        private float destroyXPosition;
         private Transform lastSpawnXPosition;
         private PlayerController playerController;
         #endregion
@@ -49,7 +53,7 @@ namespace Assets.MyFolder._01.Script._02.Object.Obstacle
         private void Start()
         {
             mainCamera = Camera.main;
-            if (mainCamera == null)
+            if (!mainCamera)
             {
                 Debug.LogError("Main Camera not found!");
                 return;
@@ -57,7 +61,7 @@ namespace Assets.MyFolder._01.Script._02.Object.Obstacle
 
             // PlayerController 찾기
             playerController = FindFirstObjectByType<PlayerController>();
-            if (playerController == null)
+            if (!playerController)
             {
                 Debug.LogError("PlayerController not found!");
                 return;
@@ -66,11 +70,9 @@ namespace Assets.MyFolder._01.Script._02.Object.Obstacle
             Vector3 rightEdge = mainCamera.ViewportToWorldPoint(new Vector3(1.1f, 0, 0));
             spawnXPosition = rightEdge.x;
 
-            Vector3 leftEdge = mainCamera.ViewportToWorldPoint(new Vector3(-0.1f, 0, 0));
-            destroyXPosition = leftEdge.x;
 
             // PipeObjectPool 초기화 확인
-            if (PipeObjectPool.Instance == null)
+            if (!PipeObjectPool.Instance)
             {
                 Debug.LogError("PipeObjectPool is not initialized!");
                 return;
@@ -85,7 +87,7 @@ namespace Assets.MyFolder._01.Script._02.Object.Obstacle
 
         private void Update()
         {
-            if (!GameManager.Instance.IsGameRunning || !mainCamera || !PipeObjectPool.Instance) return;
+            if (!GameManager.Instance.IsGameRunning || !mainCamera ) return;
 
             if (Mathf.Abs(lastSpawnXPosition.position.x- spawnXPosition) >= baseSpawnInterval)
             {
@@ -119,12 +121,18 @@ namespace Assets.MyFolder._01.Script._02.Object.Obstacle
 
             SpawnTopPipe();
             SpawnBottomPipe();
+            SpawnCollisionPipe();
         }
 
         private void SpawnTopPipe()
         {
             Vector3 topPipePosition = new Vector3(spawnXPosition, currentHeight + gapHeight / 2, 0);
             GameObject topPipe = PipeObjectPool.Instance.GetPipe(topPipePosition, Quaternion.identity);
+            if (!topPipe)
+            {
+                Debug.LogError("topPipe : NULL");
+                return;
+            }
             lastSpawnXPosition = topPipe.transform;
             topPipe.transform.localScale = new Vector3(1, 1, 1);
             topPipe.transform.SetParent(transform);
@@ -134,8 +142,21 @@ namespace Assets.MyFolder._01.Script._02.Object.Obstacle
         {
             Vector3 bottomPipePosition = new Vector3(spawnXPosition, currentHeight - gapHeight / 2, 0);
             GameObject bottomPipe = PipeObjectPool.Instance.GetPipe(bottomPipePosition, Quaternion.identity);
+            if (!bottomPipe)
+            {
+                Debug.LogError("bottomPipe : NULL");
+                return;
+            }
             bottomPipe.transform.localScale = new Vector3(1, -1, 1);
             bottomPipe.transform.SetParent(transform);
+        }
+
+        private void SpawnCollisionPipe()
+        {
+            Vector3 spawnPosition = new Vector3(spawnXPosition,currentHeight);
+            GameObject collisionPipe = ScorePipeObjectPool.Instance.GetPipe(spawnPosition, Quaternion.identity);
+            collisionPipe.transform.localScale = new Vector3(1, 1, 1);
+            collisionPipe.transform.SetParent(transform);
         }
 
         private int GetRandomSameHeightCount()

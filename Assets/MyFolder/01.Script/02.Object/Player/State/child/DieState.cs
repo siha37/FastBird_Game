@@ -1,12 +1,13 @@
-using UnityEngine;
-
-namespace Assets.MyFolder._01.Script._02.Object.Player.State.child
+namespace MyFolder._01.Script._02.Object.Player.State.child
 {
     public class DieState : IPlayerState
     {
-        public void Enter()
+        private PlayerController player;
+        public void Enter(PlayerController player)
         {
-            
+            GameManager.Instance.StopGame();
+            this.player = player;
+            player.moduleAble = false;
         }
         public void Update()
         {

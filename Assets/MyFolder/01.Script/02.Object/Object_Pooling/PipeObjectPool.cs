@@ -1,6 +1,7 @@
+using Assets.MyFolder._01.Script._02.Object.Object_Pooling;
 using UnityEngine;
 
-namespace Assets.MyFolder._01.Script._02.Object.Object_Pooling
+namespace MyFolder._01.Script._02.Object.Object_Pooling
 {
     public class PipeObjectPool : MonoBehaviour
     {
@@ -32,7 +33,7 @@ namespace Assets.MyFolder._01.Script._02.Object.Object_Pooling
             if (_instance == null)
             {
                 _instance = this;
-                DontDestroyOnLoad(gameObject);
+                //DontDestroyOnLoad(gameObject);
                 InitializePool();
             }
             else if (_instance != this)
@@ -45,7 +46,7 @@ namespace Assets.MyFolder._01.Script._02.Object.Object_Pooling
         {
             if (isInitialized) return;
 
-            if (pipePrefab == null)
+            if (!pipePrefab)
             {
                 Debug.LogError("Pipe prefab is not assigned!");
                 return;
@@ -56,7 +57,7 @@ namespace Assets.MyFolder._01.Script._02.Object.Object_Pooling
             {
                 new ObjectPool.Pool
                 {
-                    tag = "Pipe",
+                    tag = pipePrefab.name,
                     prefab = pipePrefab,
                     size = poolSize
                 }
@@ -75,7 +76,7 @@ namespace Assets.MyFolder._01.Script._02.Object.Object_Pooling
                 return null;
             }
 
-            GameObject pipe = objectPool.SpawnFromPool("Pipe", position, rotation);
+            GameObject pipe = objectPool.SpawnFromPool(pipePrefab.name, position, rotation);
             if (!pipe)
             {
                 Debug.LogError("Failed to spawn pipe from pool!");
@@ -97,7 +98,7 @@ namespace Assets.MyFolder._01.Script._02.Object.Object_Pooling
                 return;
             }
 
-            objectPool.ReturnToPool("Pipe", pipe);
+            objectPool.ReturnToPool(pipePrefab.name, pipe);
         }
     }
 } 

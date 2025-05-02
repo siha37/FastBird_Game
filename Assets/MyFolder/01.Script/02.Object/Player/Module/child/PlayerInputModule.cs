@@ -1,13 +1,121 @@
 ﻿using Assets.MyFolder._01.Script._02.Object.Player;
 using Assets.MyFolder._01.Script._02.Object.Player.Module;
 using Assets.MyFolder._01.Script._02.Object.Player.Module.child;
-using Assets.MyFolder._01.Script._02.Object.Player.State;
-using Assets.MyFolder._01.Script._02.Object.Player.State.child;
+using MyFolder._01.Script._02.Object.Player.State;
+using MyFolder._01.Script._02.Object.Player.State.child;
+using UnityEngine.InputSystem;
 using UnityEngine;
 
 namespace MyFolder._01.Script._02.Object.Player.Module.child
 {
+    
     public class PlayerInputModule : IPlayerTickableModule
+    {
+        PlayerController player;
+        private InputAction touchAction;
+        private InputAction touchPositionAction;
+
+        private Vector2 touchStartPosition;
+        private float dragThreshold = 50f;
+        private bool isDragging = false;
+        private Vector2 dragStartPosition;
+        private bool isTouching = false;
+        private float touchStartTime;
+        private float touchHoldTime = 0.1f;
+        private float positionThreshold = 10f;
+        private bool isTouchConfirmed = false;
+
+        void IPlayerModule.Init(PlayerController player)
+        {
+            this.player = player;
+
+            var actionAsset = player.inputActionAsset; // 예: PlayerInput.inputactions 참조
+            var map = actionAsset.FindActionMap("Touch");
+            touchAction = map.FindAction("PrimaryContact");
+            touchPositionAction = map.FindAction("PrimaryPosition");
+
+            touchAction.Enable();
+            touchPositionAction.Enable();
+        }
+
+        void IPlayerTickableModule.Update()
+        {
+            if (touchAction == null || touchPositionAction == null) return;
+            Debug.Log(touchAction.phase.ToString());
+            bool isPressed = touchAction.phase == InputActionPhase.Started || touchAction.phase == InputActionPhase.Performed;
+
+
+            if (isPressed && !isTouching)
+            {
+                // Began
+                touchStartPosition = touchPositionAction.ReadValue<Vector2>();
+                touchStartTime = Time.time;
+                isTouching = true;
+                isDragging = false;
+                isTouchConfirmed = false;
+            }
+            else if (isPressed && isTouching)
+            {
+                // Moved / Stationary
+                Vector2 currentPosition = touchPositionAction.ReadValue<Vector2>();
+                float dragDistance = Vector2.Distance(touchStartPosition, currentPosition);
+                float elapsedTime = Time.time - touchStartTime;
+
+                if (!isTouchConfirmed && elapsedTime >= touchHoldTime && !isDragging && dragDistance < positionThreshold)
+                {
+                    isTouchConfirmed = true;
+                    player.GetModule<PlayerMovement>().Jump();
+                    return;
+                }
+
+                if (dragDistance > dragThreshold && !isDragging)
+                {
+                    isTouchConfirmed = true;
+                    isDragging = true;
+                    dragStartPosition = player.transform.position;
+                    player.GetModule<PlayerGravityModule>().SetGravityEnabled(false);
+                    player.SetPlayerState<DashState>();
+                }
+
+                if (isDragging)
+                {
+                    player.transform.position = new Vector3(
+                        player.transform.position.x,
+                        dragStartPosition.y,
+                        player.transform.position.z
+                    );
+                }
+            }
+            else if (!isPressed && isTouching)
+            {
+                // Ended
+                if (isDragging)
+                {
+                    if (player.GetCurrentState() == nameof(DashState))
+                    {
+                        player.GetModule<PlayerGravityModule>().SetGravityEnabled(true);
+                        player.SetPlayerState<IdleState>();
+                    }
+                }
+                else if (!isTouchConfirmed)
+                {
+                    player.GetModule<PlayerMovement>().Jump();
+                }
+
+                isDragging = false;
+                isTouching = false;
+                isTouchConfirmed = false;
+            }
+        }
+
+        void IPlayerTickableModule.FixedUpdate() { }
+        void IPlayerTickableModule.LateUpdate() { }
+        void IPlayerModule.OnDisable() { }
+        void IPlayerModule.OnEnable() { }
+        void IPlayerModule.ChangedState(IPlayerState oldstate, IPlayerState newstate) { }
+    }
+    /*
+     * public class PlayerInputModule : IPlayerTickableModule
     {
         PlayerController player;
         private Vector2 touchStartPosition;
@@ -71,7 +179,6 @@ namespace MyFolder._01.Script._02.Object.Player.Module.child
                                 // 중력 멈춤
                                 player.GetModule<PlayerGravityModule>().SetGravityEnabled(false);
                                 // 배경/파이프 속도 증가
-                                player.SetBackgroundSpeed(2f);
                                 player.SetPlayerState<DashState>();
                             }
 
@@ -90,11 +197,14 @@ namespace MyFolder._01.Script._02.Object.Player.Module.child
                     case TouchPhase.Ended:
                         if (isDragging)
                         {
-                            Debug.Log("[PlayerInput] Drag ended - Resetting gravity and speed");
-                            // 드래그 종료 시 중력 다시 적용
-                            player.GetModule<PlayerGravityModule>().SetGravityEnabled(true);
-                            // 배경/파이프 속도 원래대로
-                            player.SetBackgroundSpeed(1f);
+                            if (player.GetCurrentState() == nameof(DashState))
+                            {
+                                Debug.Log("[PlayerInput] Drag ended - Resetting gravity and speed");
+                                // 드래그 종료 시 중력 다시 적용
+                                player.GetModule<PlayerGravityModule>().SetGravityEnabled(true);
+                                // 배경/파이프 속도 원래대로
+                                player.SetPlayerState<IdleState>();   
+                            }
                         }
                         else if (isTouching && !isTouchConfirmed)
                         {
@@ -115,4 +225,5 @@ namespace MyFolder._01.Script._02.Object.Player.Module.child
         void IPlayerModule.OnEnable() { }
         void IPlayerModule.ChangedState(IPlayerState oldstate, IPlayerState newstate) { }
     }
+     */
 }

@@ -1,7 +1,6 @@
-using Assets.MyFolder._01.Script._02.Object.Player.State.child;
-using UnityEngine;
+using Assets.MyFolder._01.Script._02.Object.Player;
 
-namespace Assets.MyFolder._01.Script._02.Object.Player.State
+namespace MyFolder._01.Script._02.Object.Player.State
 {
     /// <summary>
     /// PlayerStateMachine class
@@ -15,44 +14,42 @@ namespace Assets.MyFolder._01.Script._02.Object.Player.State
     /// <see cref="IPlayerState"/>
     public class PlayerStateMachine
     {
-        /********************Àü¿ª º¯¼ö ¼±¾ð********************/
+        /********************ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½********************/
 
         PlayerController player;
 
         IPlayerState currentState;
 
 
-        /*********************»ý¼ºÀÚ**************************/
+        /*********************ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½**************************/
 
         public PlayerStateMachine(PlayerController player)
         {
             this.player = player;
         }
 
-        /********************ÃÊ±âÈ­ ÇÔ¼ö**********************/
+        /********************ï¿½Ê±ï¿½È­ ï¿½Ô¼ï¿½**********************/
 
         private void Start()
         {
 
         }
 
-        /********************¾÷µ¥ÀÌÆ® ÇÔ¼ö********************/
+        /********************ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ® ï¿½Ô¼ï¿½********************/
 
         private void Update()
         {
             currentState?.Update();
         }
 
-        /********************Public ÇÔ¼ö*********************/
+        /********************Public ï¿½Ô¼ï¿½*********************/
         public void ChangeState<T>(out IPlayerState oldState, out IPlayerState newState) where T : IPlayerState, new()
         {
             newState = new T();
             oldState = currentState;
             currentState?.Exit();
             currentState = newState;
-            currentState.Enter();
-
-
+            currentState?.Enter(player);
         }
 
         public string GetCurrentState()
@@ -60,7 +57,7 @@ namespace Assets.MyFolder._01.Script._02.Object.Player.State
             return currentState.GetName();
         }
 
-        /********************Private ÇÔ¼ö********************/
+        /********************Private ï¿½Ô¼ï¿½********************/
 
 
     }

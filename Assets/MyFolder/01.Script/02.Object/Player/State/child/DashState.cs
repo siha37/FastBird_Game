@@ -1,10 +1,9 @@
-using UnityEngine;
+namespace MyFolder._01.Script._02.Object.Player.State.child
 
-namespace Assets.MyFolder._01.Script._02.Object.Player.State.child
 {
     public class DashState : IPlayerState
     {
-        public void Enter()
+        public void Enter(PlayerController player)
         {
             
         }

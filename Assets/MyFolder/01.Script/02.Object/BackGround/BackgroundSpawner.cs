@@ -2,6 +2,7 @@ using UnityEngine;
 using Assets.MyFolder._01.Script._02.Object.Object_Pooling;
 using NUnit.Framework;
 using System.Collections.Generic;
+using MyFolder._01.Script._02.Object.BackGround;
 
 namespace Assets.MyFolder._01.Script._02.Object.Background
 {
@@ -12,7 +13,12 @@ namespace Assets.MyFolder._01.Script._02.Object.Background
 
         private void Start()
         {
-            // 초기 배경 생성
+            BaseBackGroundSpawn();
+            Layer0_BackGround();
+        }
+
+        private void BaseBackGroundSpawn()
+        {            
             List<BackgroundScroller> backgroundScrollers = new List<BackgroundScroller>();
             for(int i = 0; i < initialBackgroundCount; i++)
             {
@@ -29,14 +35,22 @@ namespace Assets.MyFolder._01.Script._02.Object.Background
             {
                 if(i==0)
                 {
-                    backgroundScrollers[i].frontBackgroundSet(backgroundScrollers[^1].transform);
+                    backgroundScrollers[i].FrontBackgroundSet(backgroundScrollers[^1].transform);
                 }
                 else
                 {
-                    backgroundScrollers[i].frontBackgroundSet(backgroundScrollers[i - 1].transform);
+                    backgroundScrollers[i].FrontBackgroundSet(backgroundScrollers[i - 1].transform);
                 }
             }
         }
 
+        private void Layer0_BackGround()
+        {
+            List<BackgroundScroller> backgroundScrollers = new List<BackgroundScroller>();
+            for (int i = 0; i < initialBackgroundCount; i++)
+            {
+                
+            }
+        }
     }
 } 

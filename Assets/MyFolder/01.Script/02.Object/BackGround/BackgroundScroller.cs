@@ -1,27 +1,33 @@
-using UnityEngine;
 using Assets.MyFolder._01.Script._02.Object.Player;
+using MyFolder._01.Script._02.Object.Player;
+using UnityEngine;
+using UnityEngine.Serialization;
 
-namespace Assets.MyFolder._01.Script._02.Object.Background
+namespace MyFolder._01.Script._02.Object.BackGround
 {
     public class BackgroundScroller : MonoBehaviour
     {
-        [SerializeField] private float baseScrollSpeed = 5;
-        [SerializeField] private int baseBackgroundWidth = 30; // 기본 배경 너비
         [SerializeField] private int baseResetPosition = -30; // 기본 리셋 위치
-        
+        [SerializeField] private int speedIndex = 0;
         private Rigidbody2D rb;
         private PlayerController playerController;
         private SpriteRenderer spriteRenderer;
-        private float spriteWidth => spriteRenderer.bounds.size.x;
-        private Transform frontBackground;
-        private float frontBackGroundPosX => frontBackground.position.x;
+        private float SpriteWidth => spriteRenderer.bounds.size.x;
+        [SerializeField] private Transform frontBackground;
+        private float FrontBackGroundPosX => frontBackground.position.x;
         private float currentmoveDistance;
         private float currentStartPosition;
         private float currentBackgroundWidth;
 
-        public void frontBackgroundSet(Transform frontBackground)
+        public void FrontBackgroundSet(Transform frontBackgroundTf)
         {
-            this.frontBackground = frontBackground;
+            this.frontBackground = frontBackgroundTf;
+            currentStartPosition = FrontBackGroundPosX + SpriteWidth;
+        }
+
+        public void Start()
+        {
+            Init();
         }
         public void Init()
         {
@@ -29,7 +35,8 @@ namespace Assets.MyFolder._01.Script._02.Object.Background
             currentStartPosition = 60;
             rb = GetComponent<Rigidbody2D>();
             spriteRenderer = GetComponent<SpriteRenderer>();
-            if (rb == null)
+            Debug.Log(spriteRenderer.bounds.size.x);
+            if (!rb)
             {
                 rb = gameObject.AddComponent<Rigidbody2D>();
                 rb.gravityScale = 0;
@@ -40,13 +47,12 @@ namespace Assets.MyFolder._01.Script._02.Object.Background
             playerController = FindFirstObjectByType<PlayerController>();
             if (!playerController)
             {
-                Debug.LogError("[BackgroundScroller] PlayerController not found!");
+               // Debug.LogError("[BackgroundScroller] PlayerController not found!");
             }
         }
         private void FixedUpdate()
         {
-
-            float speed = BackgroundManager.Instance.BackGroundMoveSpeed * Time.fixedDeltaTime;
+            float speed = BackgroundManager.Instance.BackGroundMoveSpeed(speedIndex) * Time.fixedDeltaTime;
             currentmoveDistance += speed;
 
             transform.position = new Vector3(currentStartPosition - currentmoveDistance, transform.position.y, transform.position.z);
@@ -75,11 +81,11 @@ namespace Assets.MyFolder._01.Script._02.Object.Background
                 if(currentStartPosition - currentmoveDistance <= baseResetPosition)
                 {
                     currentmoveDistance = 0;
-                    currentStartPosition = frontBackGroundPosX + spriteWidth;
+                    currentStartPosition = FrontBackGroundPosX + SpriteWidth;
                     Vector3 newPosition = transform.position;
                     newPosition.x = currentStartPosition;
                     transform.position = newPosition;   
-                    Debug.Log(gameObject.name +"-"+(frontBackGroundPosX - transform.position.x));
+                    //Debug.Log(gameObject.name +"-"+(FrontBackGroundPosX - transform.position.x));
                 }
             }
         }

@@ -1,3 +1,4 @@
+using System.Security.Cryptography.X509Certificates;
 using UnityEngine;
 
 public class SingleTone<T> : MonoBehaviour where T : SingleTone<T>
@@ -7,10 +8,10 @@ public class SingleTone<T> : MonoBehaviour where T : SingleTone<T>
     {
         get
         {
-            if (instance == null)
+            if (!instance)
             {
                 instance = FindFirstObjectByType<T>();
-                if (instance == null)
+                if (!instance)
                 {
                     GameObject obj = new GameObject(typeof(T).Name);
                     instance = obj.AddComponent<T>();

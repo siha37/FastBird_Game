@@ -1,5 +1,6 @@
-using Assets.MyFolder._01.Script._02.Object.Player.State;
-using Assets.MyFolder._01.Script._02.Object.Player.State.child;
+using MyFolder._01.Script._02.Object.Player;
+using MyFolder._01.Script._02.Object.Player.State;
+using MyFolder._01.Script._02.Object.Player.State.child;
 using UnityEngine;
 
 namespace Assets.MyFolder._01.Script._02.Object.Player.Module.child
@@ -49,7 +50,7 @@ namespace Assets.MyFolder._01.Script._02.Object.Player.Module.child
         {
             if(newstate is MoveState)
             {
-                Debug.Log("MoveAnim");
+                
             }
         }
 

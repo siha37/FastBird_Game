@@ -1,13 +1,16 @@
+using System.Collections.Generic;
 using Assets.MyFolder._01.Script._02.Object.Player.Module;
 using Assets.MyFolder._01.Script._02.Object.Player.Module.child;
-using Assets.MyFolder._01.Script._02.Object.Player.State;
-using Assets.MyFolder._01.Script._02.Object.Player.State.child;
-using System.Collections.Generic;
+using MoreMountains.Feedbacks;
+using MyFolder._01.Script._01.Manager;
 using MyFolder._01.Script._02.Object.Player.Module.child;
+using MyFolder._01.Script._02.Object.Player.State;
+using MyFolder._01.Script._02.Object.Player.State.child;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.Serialization;
 
-namespace Assets.MyFolder._01.Script._02.Object.Player
+namespace MyFolder._01.Script._02.Object.Player
 {
     /// <summary>
     /// PlayerController class
@@ -24,9 +27,11 @@ namespace Assets.MyFolder._01.Script._02.Object.Player
         /********************���� ���� ����********************/
         #region MODULE
 
+        public bool moduleAble = false; 
         Dictionary<System.Type, IPlayerModule> modules = new Dictionary<System.Type, IPlayerModule>();
         List<IPlayerTickableModule> tickableModules = new List<IPlayerTickableModule>();
-
+        List<IPlayerColliderModule> colliderModules = new List<IPlayerColliderModule>();
+        
         #endregion
 
         #region STATE
@@ -43,8 +48,24 @@ namespace Assets.MyFolder._01.Script._02.Object.Player
 
         #endregion
 
+        #region PROPERTY
         private float backgroundSpeed = 1f;
+        [SerializeField] private float dashMultiplier = 3f; 
+        [SerializeField] private MMF_Player dashMf;
+        public MMF_Player DashMf => dashMf;
+        [SerializeField] private MMF_Player dashToIdleMf;
+        public MMF_Player DashToIdleMf => dashToIdleMf;
+        [SerializeField] private MMF_Player dieMf;  
+        public MMF_Player DieMf => dieMf;
+        
 
+        public ScoreManager scoreManager;
+
+        [SerializeField] private SpriteRenderer spriteObject;
+        public SpriteRenderer SpriteObject => spriteObject; 
+        
+        #endregion
+        
         /********************  ********************/
         #region INIT
         private void Start()
@@ -53,36 +74,28 @@ namespace Assets.MyFolder._01.Script._02.Object.Player
             StateInit();
         }
 
-        private void ModuleInt()
-        {
-            AddModule<PlayerStatsModule>();
-            AddModule<PlayerMovement>();
-            AddModule<PlayerInputModule>();
-            AddModule<AnimationController>();
-            AddModule<PlayerGravityModule>();
-        }
-
-        private void StateInit()
-        {
-            stateMachine = new PlayerStateMachine(this);
-            SetPlayerState<MoveState>();
-        }
         #endregion
 
         /********************Ʈ  Լ********************/
         #region UPDATE
         private void Update()
         {
-            foreach (var state in tickableModules)
+            if (moduleAble)
             {
-                state.Update();
+                foreach (var state in tickableModules)
+                {
+                    state.Update();
+                }
             }
         }
         private void FixedUpdate()
         {
-            foreach (var state in tickableModules)
+            if (moduleAble)
             {
-                state.FixedUpdate();
+                foreach (var state in tickableModules)
+                {
+                    state.FixedUpdate();
+                }
             }
         }
         #endregion
@@ -103,6 +116,8 @@ namespace Assets.MyFolder._01.Script._02.Object.Player
             modules.Add(type, module);
             if(module is IPlayerTickableModule tickable)
                 tickableModules.Add(tickable);
+            else if (module is IPlayerColliderModule colliderable)
+                colliderModules.Add(colliderable);
             module.Init(this);
 
             return (T)module;
@@ -157,6 +172,8 @@ namespace Assets.MyFolder._01.Script._02.Object.Player
         }
 
         #endregion
+        
+        #region  SPEEDRETURN
 
         public void SetBackgroundSpeed(float speed)
         {
@@ -164,18 +181,64 @@ namespace Assets.MyFolder._01.Script._02.Object.Player
             // 배경과 파이프의 속도를 변경하는 로직 추가
             // 예: BackgroundController.Instance.SetSpeed(speed);
             // 예: PipeSpawner.Instance.SetSpeed(speed);
-            Debug.Log($"[PlayerController] Background speed set to: {speed}");
+            //Debug.Log($"[PlayerController] Background speed set to: {speed}");
         }
 
         public float GetBackgroundSpeed()
         {
+            if(GetCurrentState() == nameof(DashState))
+                return backgroundSpeed * dashMultiplier;
             return backgroundSpeed;
         }
+
+        #endregion
 
         /********************Private  Լ**********************/
 
         #region MODULE
 
+        private void ModuleInt()
+        {
+            AddModule<PlayerStatsModule>();
+            AddModule<PlayerMovement>();
+            AddModule<PlayerInputModule>();
+            AddModule<AnimationController>();
+            AddModule<PlayerGravityModule>();
+            AddModule<PlayerCameraAreaModule>();
+            AddModule<PlayerHitModule>();
+            AddModule<PlayerFeelControllModule>();
+            AddModule<PlayerDieModule>();
+        }
+
+        #endregion
+
+        #region STATE
+
+        private void StateInit()
+        {
+            stateMachine = new PlayerStateMachine(this);
+            SetPlayerState<StartState>();
+        }
+
+        #endregion
+        
+        #region COLLIDER
+        
+        private void OnTriggerEnter2D(Collider2D col)
+        {
+            foreach (IPlayerColliderModule colliderModule in colliderModules)
+            {
+                colliderModule.OnTriggerEnter2D(col);
+            }
+        }
+
+        private void OnTriggerExit2D(Collider2D col)
+        {
+            foreach (IPlayerColliderModule colliderModule in colliderModules)
+            {
+                colliderModule.OnTriggerExit2D(col);
+            }
+        }
         #endregion
     }
 }

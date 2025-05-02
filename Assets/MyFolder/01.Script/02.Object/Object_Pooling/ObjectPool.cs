@@ -31,13 +31,11 @@ namespace Assets.MyFolder._01.Script._02.Object.Object_Pooling
         public void InitializePool()
         {
             if (isInitialized) return;
-
             if (pools == null || pools.Count == 0)
             {
                 Debug.LogError("No pools defined!");
                 return;
             }
-
             poolDictionary = new Dictionary<string, Queue<GameObject>>();
             activeObjects = new Dictionary<string, List<GameObject>>();
 
@@ -82,14 +80,14 @@ namespace Assets.MyFolder._01.Script._02.Object.Object_Pooling
 
             Queue<GameObject> pool = poolDictionary[tag];
             List<GameObject> activeList = activeObjects[tag];
-
+            //Debug.Log(poolDictionary[tag].Count);
             if (pool.Count == 0)
             {
                 // 풀이 비어있으면 새로운 오브젝트 생성
                 GameObject newObj = Instantiate(pools.Find(p => p.tag == tag).prefab);
-                newObj.SetActive(true);
                 newObj.transform.position = position;
                 newObj.transform.rotation = rotation;
+                newObj.SetActive(true);
                 activeList.Add(newObj);
                 return newObj;
             }
@@ -101,9 +99,9 @@ namespace Assets.MyFolder._01.Script._02.Object.Object_Pooling
                 return null;
             }
 
-            objectToSpawn.SetActive(true);
             objectToSpawn.transform.position = position;
             objectToSpawn.transform.rotation = rotation;
+            objectToSpawn.SetActive(true);
             activeList.Add(objectToSpawn);
             
             return objectToSpawn;
