@@ -23,6 +23,7 @@ namespace Assets.MyFolder._01.Script._02.Object.Player.Module.child
 
         public void FixedUpdate()
         {
+            
         }
 
         public void LateUpdate()

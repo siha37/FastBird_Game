@@ -33,6 +33,10 @@ namespace MyFolder._01.Script._02.Object.Player.Module.child
             {
                 collisionAble = false;
             }
+            else if(oldstate is StartState)
+            {
+                collisionAble = true;
+            }
         }
 
         public void OnCollisionEnter2D(Collision2D collision)

@@ -11,7 +11,6 @@
 
         public void Update()
         {
-            throw new System.NotImplementedException();
         }
 
         public void Exit()

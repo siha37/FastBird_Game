@@ -175,13 +175,6 @@ namespace Assets.MyFolder._01.Script._02.Object.Player.Module.child
             return currentVelocity.y;
         }
 
-        public void SetGravityDie()
-        {
-            isGravityEnabled = false;
-            currentVelocity.y = 0f; // 중력 비활성화 시 수직 속도 초기화
-            targetRotation = 0f; // 회전도 0으로 초기화
-            playerTransform.rotation = Quaternion.identity; // 현재 회전도 0으로 설정
-        }
         public void SetGravityEnabled(bool enabled)
         {
             isGravityEnabled = enabled;

@@ -1,3 +1,5 @@
+using MyFolder._01.Script._01.SingleTone;
+
 namespace MyFolder._01.Script._02.Object.Player.State.child
 {
     public class DieState : IPlayerState
@@ -5,7 +7,7 @@ namespace MyFolder._01.Script._02.Object.Player.State.child
         private PlayerController player;
         public void Enter(PlayerController player)
         {
-            GameManager.Instance.StopGame();
+            StageManager.Instance.StopGame();
             this.player = player;
             player.moduleAble = false;
         }

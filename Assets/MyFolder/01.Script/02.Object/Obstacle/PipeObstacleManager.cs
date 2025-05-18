@@ -1,4 +1,5 @@
 using Assets.MyFolder._01.Script._02.Object.Player;
+using MyFolder._01.Script._01.SingleTone;
 using MyFolder._01.Script._02.Object.Player;
 using UnityEngine;
 
@@ -16,7 +17,7 @@ namespace MyFolder._01.Script._02.Object.Obstacle
         {
             get
             {
-                if (playerController != null)
+                if (playerController)
                 {
                     float finalSpeed = basePipeMoveSpeed * playerController.GetBackgroundSpeed();
 #if UNITY_EDITOR

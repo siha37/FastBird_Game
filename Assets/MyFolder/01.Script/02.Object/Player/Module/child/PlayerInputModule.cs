@@ -11,6 +11,8 @@ namespace MyFolder._01.Script._02.Object.Player.Module.child
     
     public class PlayerInputModule : IPlayerTickableModule
     {
+        public bool TouchAble = true;
+        
         PlayerController player;
         private InputAction touchAction;
         private InputAction touchPositionAction;
@@ -40,8 +42,9 @@ namespace MyFolder._01.Script._02.Object.Player.Module.child
 
         void IPlayerTickableModule.Update()
         {
+            if (!TouchAble) return;
             if (touchAction == null || touchPositionAction == null) return;
-            Debug.Log(touchAction.phase.ToString());
+            //Debug.Log(touchAction.phase.ToString());
             bool isPressed = touchAction.phase == InputActionPhase.Started || touchAction.phase == InputActionPhase.Performed;
 
 

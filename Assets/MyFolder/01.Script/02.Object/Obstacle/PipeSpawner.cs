@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Assets.MyFolder._01.Script._02.Object.Player;
+using MyFolder._01.Script._01.SingleTone;
 using MyFolder._01.Script._02.Object.Object_Pooling;
 using MyFolder._01.Script._02.Object.Player;
 using UnityEngine;
@@ -87,8 +88,11 @@ namespace MyFolder._01.Script._02.Object.Obstacle
 
         private void Update()
         {
-            if (!GameManager.Instance.IsGameRunning || !mainCamera ) return;
-
+            if (!StageManager.Instance.IsGameRunning || !mainCamera ) return;
+            
+            if(!lastSpawnXPosition)
+                SpawnPipe();
+            
             if (Mathf.Abs(lastSpawnXPosition.position.x- spawnXPosition) >= baseSpawnInterval)
             {
                 SpawnPipe();
@@ -175,6 +179,28 @@ namespace MyFolder._01.Script._02.Object.Obstacle
 
             return randomHeightList[randomHeightList.Count - 1].count;
         }
+        #endregion
+
+        #region Public Methods
+
+        public void AllPipeReturn()
+        {
+            for (int i = 0; i < transform.childCount; i++)
+            {
+                GameObject child = transform.GetChild(i).gameObject;
+                if (child.activeSelf)
+                {
+                    if(child.CompareTag("Obstacle"))
+                        PipeObjectPool.Instance.ReturnPipe(child);
+                    else
+                        ScorePipeObjectPool.Instance.ReturnPipe(child);
+                }
+                    
+            }
+
+            lastSpawnXPosition = null;
+        }
+
         #endregion
     }
 } 

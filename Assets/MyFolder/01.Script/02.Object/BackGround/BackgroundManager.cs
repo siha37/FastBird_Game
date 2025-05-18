@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Assets.MyFolder._01.Script._02.Object.Player;
+using MyFolder._01.Script._01.SingleTone;
 using MyFolder._01.Script._02.Object.Player;
 using UnityEngine;
 

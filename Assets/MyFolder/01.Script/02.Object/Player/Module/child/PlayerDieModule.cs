@@ -31,12 +31,13 @@ namespace MyFolder._01.Script._02.Object.Player.Module.child
                 if(!player.DieMf.IsPlaying)
                     player.DieMf.PlayFeedbacks();
                 player.SetBackgroundSpeed(0);
-                player.GetModule<PlayerGravityModule>().SetGravityDie();
+                player.GetModule<PlayerGravityModule>().SetGravityEnabled(false);
                 //Time.timeScale = 0;
             }
-            else if(oldstate is DieState)
+            else if(oldstate is StartState)
             {
-                
+                player.SetBackgroundSpeed(1);
+                player.GetModule<PlayerGravityModule>().SetGravityEnabled(true);
             }
         }
     }

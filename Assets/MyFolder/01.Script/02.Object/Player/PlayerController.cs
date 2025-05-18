@@ -1,8 +1,9 @@
+using System.Collections;
 using System.Collections.Generic;
 using Assets.MyFolder._01.Script._02.Object.Player.Module;
 using Assets.MyFolder._01.Script._02.Object.Player.Module.child;
 using MoreMountains.Feedbacks;
-using MyFolder._01.Script._01.Manager;
+using MyFolder._01.Script._01.SingleTone;
 using MyFolder._01.Script._02.Object.Player.Module.child;
 using MyFolder._01.Script._02.Object.Player.State;
 using MyFolder._01.Script._02.Object.Player.State.child;
@@ -101,6 +102,19 @@ namespace MyFolder._01.Script._02.Object.Player
         #endregion
 
         /********************Public  Լ*********************/
+        #region RETRY
+
+        public void ReStartInit()
+        {
+            transform.position = Vector3.zero;
+            transform.localScale = Vector3.one;
+            transform.GetChild(0).localScale = Vector3.one;
+            SetPlayerState<StartState>();
+        }
+        
+        #endregion
+        
+        
         #region MODULE
 
         public T AddModule<T>() where T : IPlayerModule, new()
@@ -148,6 +162,24 @@ namespace MyFolder._01.Script._02.Object.Player
             }
             Debug.LogError($"Not Exist Module : {type}");
             return default;
+        }
+
+        #endregion
+
+        #region Module Interface
+
+        public void BlockInput(bool block)
+        {
+            Debug.Log("BLOCK"+block.ToString());
+            if (block)
+                GetModule<PlayerInputModule>().TouchAble = false;
+            else
+                StartCoroutine(nameof(WaitOneFrame));
+        }
+        private IEnumerator WaitOneFrame()
+        {
+            yield return new WaitForEndOfFrame();
+            GetModule<PlayerInputModule>().TouchAble = true;
         }
 
         #endregion
