@@ -4,7 +4,7 @@ namespace MyFolder._01.Script._01.SingleTone
 {
     public class SingleTone<T> : MonoBehaviour where T : SingleTone<T>
     {
-        private static T instance;
+        protected static T instance;
         public static T Instance
         {
             get
@@ -24,7 +24,7 @@ namespace MyFolder._01.Script._01.SingleTone
         }
         protected virtual void Awake()
         {
-            if (instance == null)
+            if (instance == null || instance == (T)this)
             {
                 instance = (T)this;
                 DontDestroyOnLoad(gameObject);

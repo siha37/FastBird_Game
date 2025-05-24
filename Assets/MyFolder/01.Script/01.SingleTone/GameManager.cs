@@ -1,6 +1,7 @@
-using MyFolder._01.Script._01.SingleTone;
-using UnityEngine;
-
-public class GameManager : SingleTone<GameManager>
+namespace MyFolder._01.Script._01.SingleTone
 {
+    public class GameManager : SingleTone<GameManager>
+    {
+    
+    }
 }

@@ -13,6 +13,7 @@ namespace MyFolder._01.Script._04.Setting
 
         public bool motionBlur = true;
 
+        [SerializeField] private TMP_Dropdown frameRateDropdown;
         [SerializeField] private Toggle bloomToggle;
         [SerializeField] private Slider bgmSlider;
         [SerializeField] private Slider sfxSlider;
@@ -26,6 +27,7 @@ namespace MyFolder._01.Script._04.Setting
         
         void Awake()
         {
+            frameRateDropdown?.onValueChanged.AddListener(SetFramerate);
             bloomToggle?.onValueChanged.AddListener(SetBloom);
             bgmSlider?.onValueChanged.AddListener(SetBgmVolume);
             sfxSlider?.onValueChanged.AddListener(SetSfxVolume);
@@ -33,6 +35,7 @@ namespace MyFolder._01.Script._04.Setting
 
         private void OnEnable()
         {
+            frameRateDropdown.value = SettingSaveManager.Instance.settingData.framerate == 60 ? 1 : 0;
             bloomToggle.isOn = SettingSaveManager.Instance.settingData.bloom;
             bgmSlider.value = SettingSaveManager.Instance.settingData.bgmVolume;
             sfxSlider.value = SettingSaveManager.Instance.settingData.sfxVolume;
@@ -40,6 +43,15 @@ namespace MyFolder._01.Script._04.Setting
             acountProfileImg.sprite = SettingSaveManager.Instance.acountImg;
         }
 
+        void SetFramerate(int value)
+        {
+            value = value == 0 ? 30 : 60;
+            SettingSaveManager.Instance.settingData.framerate = value;
+            
+            QualitySettings.vSyncCount = 0;
+            Application.targetFrameRate = value;
+        }
+        
         void SetBgmVolume(float volume)
         {
             SettingSaveManager.Instance.settingData.bgmVolume = volume;

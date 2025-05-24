@@ -15,7 +15,7 @@ namespace MyFolder._01.Script._01.SingleTone
         [SerializeField] TextMeshProUGUI scoreText;
         
         [SerializeField] MMF_Player scoreFeedback;
-        private const string BasicScoreID = "CgklhoaFpdsWEAIQAQ";
+        private const string BasicScoreID = "CgkIhoaFpdsWEAIQAQ";
         public delegate void SetScoreDelegate(int score);
         public SetScoreDelegate scoreUpPointDelegate;
 

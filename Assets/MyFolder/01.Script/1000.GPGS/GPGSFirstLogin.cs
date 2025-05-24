@@ -34,6 +34,7 @@ namespace MyFolder._01.Script._1000.GPGS
             }
             else
             {
+                SettingSaveManager s=  SettingSaveManager.Instance;
                 logtext.text = "Fail \n";
             
                 //Disable your intergration with play Games Services or show a login button

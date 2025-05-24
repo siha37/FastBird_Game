@@ -11,6 +11,7 @@ namespace MyFolder._01.Script._01.SingleTone
     public class SettingData
     {
         public bool bloom;
+        public int framerate;
         public string accountName;
         public string accountId;
         public float bgmVolume;
@@ -65,6 +66,8 @@ namespace MyFolder._01.Script._01.SingleTone
                 new MixerVloumeData(MIXER_SFX, settingData.bgmVolume),
                 new MixerVloumeData(MIXER_UI, settingData.bgmVolume)
                 );
+            QualitySettings.vSyncCount = 0;
+            Application.targetFrameRate = settingData.framerate;
         base.Awake();
         }
 
@@ -87,7 +90,7 @@ namespace MyFolder._01.Script._01.SingleTone
             }
 
             // 기본값 반환
-            return new SettingData { bgmVolume = 1.0f, bloom = true };
+            return new SettingData { bgmVolume = 1.0f, bloom = true, framerate = 60 };
         }
     }
 }
