@@ -18,7 +18,7 @@ namespace MyFolder._01.Script._02.Object.Player.Module.child
         private InputAction touchPositionAction;
 
         private Vector2 touchStartPosition;
-        private float dragThreshold = 50f;
+        private float dragThreshold = 80f;
         private bool isDragging = false;
         private Vector2 dragStartPosition;
         private bool isTouching = false;
