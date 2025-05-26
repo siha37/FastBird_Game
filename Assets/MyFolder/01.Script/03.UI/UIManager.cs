@@ -11,6 +11,7 @@ namespace MyFolder._01.Script._03.UI
     {
         private static Stack<BaseUI> uiStack = new Stack<BaseUI>();
 
+        [SerializeField] private InputActionAsset actionAsset;
         private InputAction backAction;
         [SerializeField] private PlayerController playerController;
 
@@ -28,14 +29,9 @@ namespace MyFolder._01.Script._03.UI
 
         private void KeyBinding()
         {
-            // Escape 키 또는 Android 뒤로가기
-            backAction = new InputAction("Back", binding: "<Keyboard>/escape");
-#if UNITY_ANDROID
-            backAction.AddBinding("<Gamepad>/buttonEast"); // Android 백 버튼 (예: B 버튼)
-            backAction.AddBinding("<AndroidBackButton>");
-#endif
-            backAction.performed += ctx => HandleBackButton();
-            backAction.Enable();
+            var map = actionAsset.FindActionMap("UI");
+            backAction = map.FindAction("Cancel");
+            backAction.started += HandleBackButton;
         }
 
         void Update()
@@ -69,13 +65,21 @@ namespace MyFolder._01.Script._03.UI
             uiStack.Push(ui);
         }
 
+        public void HandleBackButton(InputAction.CallbackContext context)
+        {
+            HandleBackButton();
+        }
         public void HandleBackButton()
         {
-            if (uiStack.Count == 0) return;
+            if (uiStack.Count == 0)
+            {
+                return;
+            }
 
             BaseUI top = uiStack.Pop();
             top.OnClose();
-
+            
+            Debug.Log("BackButton" + top.gameObject.name);
             if (top.RequiresPause)
             {
                 Time.timeScale = 1f;

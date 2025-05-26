@@ -46,6 +46,8 @@ namespace MyFolder._01.Script._01.SingleTone
 
         public void ReStart()
         {
+            UIManager.Instance.HandleBackButton();
+            UIManager.Instance.HandleBackButton();
             retryRewardADCount.UseRewardedAd();
             countdownFeel.PlayFeedbacks();
             player.ReStartInit();

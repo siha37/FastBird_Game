@@ -1,2 +1,13 @@
 fileFormatVersion: 2
 guid: 0a8ca59a6ebf8e7438f0712960d2476b
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - actionAsset: {fileID: -944628639613478452, guid: 3d99bd422e329e749bd68eee7b6906e4, type: 3}
+  - playerController: {instanceID: 0}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

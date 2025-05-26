@@ -29,7 +29,7 @@ namespace MyFolder._01.Script._03.UI.Elemental
         private void ScoreResultOut()
         {
             newRecordObject.gameObject.SetActive(false);
-            score = scoreManager.PNowScore;
+            score = scoreManager.PResultScore;
 /*            ILeaderboard lb = PlayGamesPlatform.Instance.CreateLeaderboard();
             lb.id = "CgklhoaFpdsWEAIQAQ";
             lb.LoadScores(ok =>

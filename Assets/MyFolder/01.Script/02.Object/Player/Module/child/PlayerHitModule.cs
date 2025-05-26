@@ -63,6 +63,14 @@ namespace MyFolder._01.Script._02.Object.Player.Module.child
             else if (other.CompareTag(scoreTag))
             {
                 playerController.scoreManager.Score_OnPointUp();
+                if (playerController.GetCurrentState() == "DashState")
+                {
+                    playerController.scoreManager.ComboScore_OnPointUp();
+                }
+                else
+                {
+                    playerController.scoreManager.ComboScore_End();
+                }
             }
         }
 

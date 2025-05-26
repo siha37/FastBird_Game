@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "836118280143",
+    "project_id": "flippy-317f7",
+    "storage_bucket": "flippy-317f7.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:836118280143:android:8cf896946a7da5961404ba",
+        "android_client_info": {
+          "package_name": "com.SIHA.FlippyBox"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAmSrpsf-8izGS5wg6URomwZDSsVFhzOkE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

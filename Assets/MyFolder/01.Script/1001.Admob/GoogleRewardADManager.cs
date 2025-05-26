@@ -38,13 +38,11 @@ public class GoogleRewardADManager : MonoBehaviour
             {
                 if (error != null || ad == null)
                 {
-                    Debug.LogError("rewarded interstitial ad failed to load an ad " +
-                                   "with error : " + error);
+                    Debug.LogError("rewarded interstitial ad failed to load an ad " + "with error : " + error);
                     return;
                 }
 
-                Debug.Log("Rewarded interstitial ad loaded with response : "
-                          + ad.GetResponseInfo());
+                Debug.Log("Rewarded interstitial ad loaded with response : " + ad.GetResponseInfo());
 
                 rewardedInterstitialAd = ad;
                 RegisterEventHandlers(ad);
