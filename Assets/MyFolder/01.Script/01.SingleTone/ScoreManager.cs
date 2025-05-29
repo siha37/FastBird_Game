@@ -59,7 +59,8 @@ namespace MyFolder._01.Script._01.SingleTone
 
         public void ReportScore()
         {
-            PResultScore = PNowScore + PTotalNowComboScore + PNowComboScore;
+            ComboScore_End();
+            PResultScore = PNowScore + PTotalNowComboScore;
             PlayGamesPlatform.Instance.ReportScore(
                 PResultScore,
                 BasicScoreID,
@@ -75,8 +76,7 @@ namespace MyFolder._01.Script._01.SingleTone
                     }
                 }
             );
-            PNowComboScore = 0;
-            comboText.gameObject.SetActive(false);
+
         }
     }
 }
