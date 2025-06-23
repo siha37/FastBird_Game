@@ -7,8 +7,8 @@ public class GoogleRewardADManager : MonoBehaviour
 {
     [Header("Cache")]
     private readonly bool enableTestAD = true; //테스트 광고 활성화 여부
-    private readonly string rewardADID = ""; //보상형 광고 ID
-    private readonly string rewardTestADID = "ca-app-pub-3940256099942544/5354046379"; //보상형 테스트 광고 ID
+    private readonly string rewardADID = "ca-app-pub-1340424031351070/1332243403"; //보상형 광고 ID
+    private readonly string rewardTestADID = "ca-app-pub-1340424031351070/1332243403"; //보상형 테스트 광고 ID
     
     private RewardedInterstitialAd rewardedInterstitialAd;
 
@@ -31,9 +31,9 @@ public class GoogleRewardADManager : MonoBehaviour
         Debug.Log("LoadRewardedInterstitialAd");
 
         var adRequest = new AdRequest();
-        adRequest.Keywords.Add("Retry_Admob");
+        adRequest.Keywords.Add("Retry_Admob2");
         
-        RewardedInterstitialAd.Load(rewardTestADID, adRequest,
+        RewardedInterstitialAd.Load(rewardADID, adRequest,
             (RewardedInterstitialAd ad, LoadAdError error) =>
             {
                 if (error != null || ad == null)

@@ -27,11 +27,13 @@ namespace MyFolder._01.Script._02.Object.Player.Module.child
         {
             if (oldstate is DashState && newstate is IdleState)
             {
+                //Dash -> Idle
                 player.DashMf.StopFeedbacks();
                 player.DashToIdleMf.PlayFeedbacks();
             }
             else if (newstate is DashState)
             {
+                //Idle -> Dash
                 player.DashToIdleMf.StopFeedbacks();
                 player.DashMf.PlayFeedbacks();
             }
